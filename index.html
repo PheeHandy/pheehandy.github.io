@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>E-learning</title>
-  </head>
-  <body>
-    <h1>Welcome to my test page</h1>
-    <button id="authButton">Authenticate</button>
+<head>
+    <title>Security</title>
+</head>
+<body>
+    <h1>Welcome to my test site</h1>
+    <button onclick="openLoginWindow()">Login</button>
 
     <script>
-      document.getElementById('authButton').addEventListener('click', function() {
-        fetch('https://script.google.com/macros/s/AKfycby-iV-v6jGkuronMOTvbD9rc0FLsOFg_YylEouuZ-BDIDZ0-lHDMK3qDzzV10JNanL-0A/exec')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
+        function openLoginWindow() {
+            var loginWindow = window.open("https://script.google.com/macros/s/AKfycbwqQn8hjSaEfWUnIpYc7N1yvpjkhM1laI9tFb22v8Dx3Pe3jArOHtAxmhDxkbq_f6HzhA/exec", "_blank");
+
+            // Add event listener to receive message from the login window
+            window.addEventListener("message", function(event) {
+                if (event.data === "Logged in") {
+                    // The user is logged in
+                    document.body.innerHTML += "<p>You are logged in.</p>";
+                    // Change the text of the button
+                    document.querySelector("button").innerText = "Logout";
+                }
+            });
+
+            // Close the login window after 10 seconds if the user didn't log in
+            setTimeout(function() {
+                if (!document.body.innerHTML.includes("You are logged in.")) {
+                    loginWindow.close();
+                }
+            }, 10000);
+        }
+
+        window.onload = function() {
+            if (document.cookie.includes("isLoggedIn=true")) {
+                // The user is logged in
+                document.body.innerHTML += "<p>You are logged in.</p>";
+                // Change the text of the button
+                document.querySelector("button").innerText = "Logout";
+            } else {
+                // The user is not logged in
+                document.body.innerHTML += "<p>You are not logged in.</p>";
             }
-            return response.text();
-          })
-          .then(data => {
-            // Assuming your Apps Script web app returns a URL for authentication
-            window.location.href = data;
-          })
-          .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
-          });
-      });
+        }
     </script>
-  </body>
+</body>
 </html>
