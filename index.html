@@ -1,1 +1,29 @@
-<h1>Hello Github Test</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>E-learning</title>
+  </head>
+  <body>
+    <h1>Welcome to my test page</h1>
+    <button id="authButton">Authenticate</button>
+
+    <script>
+      document.getElementById('authButton').addEventListener('click', function() {
+        fetch('https://script.google.com/macros/s/AKfycby-iV-v6jGkuronMOTvbD9rc0FLsOFg_YylEouuZ-BDIDZ0-lHDMK3qDzzV10JNanL-0A/exec')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then(data => {
+            // Assuming your Apps Script web app returns a URL for authentication
+            window.location.href = data;
+          })
+          .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+          });
+      });
+    </script>
+  </body>
+</html>
